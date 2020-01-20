@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../models/property.dart';
 
 class CreateProperty extends StatefulWidget {
   final title = "Create Property";

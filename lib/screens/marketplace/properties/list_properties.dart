@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'property.dart';
+import 'package:provider/provider.dart';
+
+import 'single_property.dart';
+import '../../../models/property.dart';
 
 class PropertiesListing extends StatefulWidget {
   final title = "Your Properties";
@@ -8,34 +11,49 @@ class PropertiesListing extends StatefulWidget {
   _PropertiesListingState createState() => _PropertiesListingState();
 }
 
+class _PropertiesList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var itemNameStyle = Theme.of(context).textTheme.title;
+    var properties = Provider.of<PropertyModel>(context);
+
+    return ListView.builder(
+      itemCount: properties.items.length,
+      itemBuilder: (context, index) => ListTile(
+        leading: Icon(Icons.done),
+        title: Text(
+          properties.items[index].address,
+          style: itemNameStyle,
+        ),
+      ),
+    );
+  }
+}
+
 class _PropertiesListingState extends State<PropertiesListing> {
   void _createProperty() {
     Navigator.pushNamed(context, '/properties/create');
   }
 
-  final List<String> properties = <String>[
-    '1234 Fake St',
-    '4321 Main St',
-    '1441 West St'
-  ];
-
-  final List<int> colorCodes = <int>[600, 500, 100];
-
   @override
   Widget build(BuildContext context) {
+    var itemNameStyle = Theme.of(context).textTheme.title;
+    var properties = Provider.of<PropertyModel>(context);
+
     Widget propertiesListView = ListView.builder(
-      itemCount: properties.length,
+      itemCount: properties.items.length,
       itemBuilder: (BuildContext context, int index) {
+        var property = properties.items[index];
         return InkWell(
           onTap: () => {
             Navigator.pushNamed(
               context,
               '/properties/property',
               arguments: PropertyArguments(
-                properties[index],
+                property.address,
               ),
             ),
-          }, // handle your onTap here
+          },
           child: Container(
             padding: EdgeInsets.only(top: 5, bottom: 5),
             height: 70,
@@ -49,7 +67,7 @@ class _PropertiesListingState extends State<PropertiesListing> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.only(left: 10),
-                    child: Text('${properties[index]}'),
+                    child: Text('${property.address}', style: itemNameStyle),
                   ),
                 ),
               ],
