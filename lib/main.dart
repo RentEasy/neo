@@ -1,19 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_redux_dev_tools/flutter_redux_dev_tools.dart';
+import 'package:neo/redux/actions.dart';
+import 'package:redux/redux.dart';
+import 'package:redux_dev_tools/redux_dev_tools.dart';
 
-import 'models/property.dart';
+import 'screens/marketplace/properties/index.dart';
+import 'model/app_state.dart';
+import 'redux/store.dart';
 import 'routes.dart';
 
-void main() => runApp(RentEasyApp());
+void main() async {
+  final store = await createReduxStore();
+
+  runApp(RentEasyApp(store));
+}
 
 class RentEasyApp extends StatelessWidget {
+  final Store<AppState> store;
+
+  final routes = <String, WidgetBuilder>{
+    '/properties/create': (BuildContext context) => new CreateProperty(),
+    '/properties/list': (BuildContext context) => new PropertyList(),
+    '/properties/property': (BuildContext context) => new PropertyListing(),
+  };
+
+  RentEasyApp(this.store);
+
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(providers: [
-      ChangeNotifierProvider<PropertyModel>(
-        create: (context) => PropertyModel(),
-        update: (context, properties) => PropertyModel(),
+    return StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        title: 'RentEasy',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: routes,
+        home: StoreBuilder<AppState>(
+            onInit: (store) => store.dispatch(FetchAllPropertiesAction()),
+            builder: (context, store) => Marketplace(store)),
       ),
-    ], child: Router());
+    );
   }
 }
+
+class Marketplace extends StatelessWidget {
+  final DevToolsStore<AppState> store;
+
+  Marketplace(this.store);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Rental Marketplace')),
+      body: PropertyList(),
+    );
+  }
+}
+
+// class RentEasyApp extends StatelessWidget {
+//   final routes = <String, WidgetBuilder>{
+//     '/properties/create': (BuildContext context) => new CreateProperty(),
+//     '/properties/list': (BuildContext context) => new PropertiesListing(),
+//     '/properties/property': (BuildContext context) => new PropertyListing(),
+//   };
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MultiProvider(
+//       providers: [
+//         ChangeNotifierProvider<PropertyModel>(
+//           create: (context) => PropertyModel(),
+//           // update: (context, properties) => PropertyModel(),
+//         ),
+//       ],
+//       child: new MaterialApp(
+//         title: 'RentEasy',
+//         theme: ThemeData(
+//           primarySwatch: Colors.blue,
+//         ),
+//         routes: routes,
+//         home: new PropertiesListing(),
+//       ),
+//     );
+//   }
+// }
