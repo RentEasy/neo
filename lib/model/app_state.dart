@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'property.dart';
+import 'package:neo/model/property.dart';
 
 class AppState extends Equatable {
   final List<Property> properties;

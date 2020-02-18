@@ -1,4 +1,4 @@
-import '../model/property.dart';
+import 'package:neo/model/property.dart';
 
 class ApiClient {
   Future<List<Property>> fetchProperties() {

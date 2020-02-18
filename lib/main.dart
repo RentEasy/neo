@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_redux_dev_tools/flutter_redux_dev_tools.dart';
+import 'package:neo/model/app_state.dart';
 import 'package:neo/redux/actions.dart';
+import 'package:neo/redux/store.dart';
+import 'package:neo/screens/marketplace/properties/index.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_dev_tools/redux_dev_tools.dart';
-
-import 'screens/marketplace/properties/index.dart';
-import 'model/app_state.dart';
-import 'redux/store.dart';
-import 'routes.dart';
 
 void main() async {
   final store = await createReduxStore();
@@ -52,10 +49,7 @@ class Marketplace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Rental Marketplace')),
-      body: PropertyList(),
-    );
+    return PropertyList();
   }
 }
 

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class Property extends Equatable {
@@ -26,20 +25,3 @@ class Property extends Equatable {
   @override
   List<Object> get props => [id, address];
 }
-
-// class PropertyModel extends ChangeNotifier {
-//   final List<Property> _properties = [
-//     Property(0, "3478 Beechwood Blvd"),
-//     Property(0, "4321 Main St"),
-//     Property(0, "1441 West St"),
-//   ];
-
-//   // PropertyModel.empty() : _properties = [];
-
-//   List<Property> get items => _properties;
-
-//   void add(Property property) {
-//     _properties.add(property);
-//     notifyListeners();
-//   }
-// }

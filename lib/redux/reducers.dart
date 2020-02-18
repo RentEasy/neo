@@ -1,6 +1,6 @@
-import './actions.dart';
-import '../model/app_state.dart';
-import '../model/property.dart';
+import 'package:neo/redux/actions.dart';
+import 'package:neo/model/app_state.dart';
+import 'package:neo/model/property.dart';
 
 AppState appStateReducers(AppState state, dynamic action) {
   if (action is AddPropertyAction) {

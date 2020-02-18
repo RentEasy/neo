@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:neo/screens/marketplace/properties/property_list.dart';
 
-import '../model/property.dart';
+import 'package:neo/model/property.dart';
+import 'package:neo/screens/marketplace/properties/property_list.dart';
 
 class AddPropertyAction extends Equatable {
   final Property property;

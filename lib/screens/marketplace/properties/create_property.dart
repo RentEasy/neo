@@ -1,17 +1,45 @@
 import 'package:flutter/material.dart';
-import '../../../model/property.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:neo/model/app_state.dart';
+import 'package:neo/model/property.dart';
+import 'package:neo/redux/actions.dart';
 
-class CreateProperty extends StatefulWidget {
-  final title = "Create Property";
+class CreateProperty extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, OnPropertyAddedCallback>(
+      converter: (store) {
+        return (address) => store.dispatch(
+              AddPropertyAction(Property(5, address)),
+            );
+      },
+      builder: (context, callback) {
+        return CreatePropertyWidget(callback);
+      },
+    );
+  }
+}
+
+class CreatePropertyWidget extends StatefulWidget {
+  final OnPropertyAddedCallback callback;
+
+  CreatePropertyWidget(this.callback);
 
   @override
-  _CreatePropertyState createState() => _CreatePropertyState();
+  State<StatefulWidget> createState() => CreatePropertyWidgetState(callback);
 }
 
 enum LeaseDuration { sixmonths, oneyear, twoyears }
 
-class _CreatePropertyState extends State<CreateProperty> {
+class CreatePropertyWidgetState extends State<CreatePropertyWidget> {
   final _formKey = GlobalKey<FormState>();
+  final OnPropertyAddedCallback callback;
+
+  CreatePropertyWidgetState(this.callback);
+
+  String _address;
+  int _bedrooms;
+  int _bathrooms;
   LeaseDuration _duration = LeaseDuration.oneyear;
 
   @override
@@ -21,10 +49,15 @@ class _CreatePropertyState extends State<CreateProperty> {
       child: ListView(
         children: <Widget>[
           TextFormField(
+            onChanged: (value) {
+              setState(() {
+                _address = value;
+              });
+            },
             decoration: const InputDecoration(
               icon: Icon(Icons.home),
               hintText: '1234 Main St. Pittsburgh, PA 15217',
-              labelText: 'Property Address *',
+              labelText: 'Property Address',
             ),
             validator: (value) {
               if (value.isEmpty) {
@@ -37,8 +70,12 @@ class _CreatePropertyState extends State<CreateProperty> {
             children: <Widget>[
               Expanded(
                 child: Container(
-                  // padding: EdgeInsets.all(10),
                   child: TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _bedrooms = int.parse(value);
+                      });
+                    },
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.airline_seat_individual_suite),
@@ -58,6 +95,11 @@ class _CreatePropertyState extends State<CreateProperty> {
                 child: Container(
                   // padding: EdgeInsets.all(10),
                   child: TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _bathrooms = int.parse(value);
+                      });
+                    },
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.airline_seat_legroom_reduced),
@@ -115,19 +157,6 @@ class _CreatePropertyState extends State<CreateProperty> {
               ),
             ],
           ),
-          TextFormField(
-            decoration: const InputDecoration(
-              icon: Icon(Icons.person),
-              hintText: 'What do people call you?',
-              labelText: 'Name *',
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter your properties addres';
-              }
-              return null;
-            },
-          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: RaisedButton(
@@ -135,7 +164,8 @@ class _CreatePropertyState extends State<CreateProperty> {
                 // Validate will return true if the form is valid, or false if
                 // the form is invalid.
                 if (_formKey.currentState.validate()) {
-                  // Process data.
+                  callback(_address);
+                  Navigator.pushNamed(context, '/properties/list');
                 }
               },
               child: Text('Submit'),
@@ -157,3 +187,5 @@ class _CreatePropertyState extends State<CreateProperty> {
         ));
   }
 }
+
+typedef OnPropertyAddedCallback = Function(String address);

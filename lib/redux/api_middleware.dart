@@ -1,8 +1,8 @@
 import 'package:redux/redux.dart';
 
-import './actions.dart';
-import '../data/api_client.dart';
-import '../model/app_state.dart';
+import 'package:neo/redux/actions.dart';
+import 'package:neo/data/api_client.dart';
+import 'package:neo/model/app_state.dart';
 
 class ApiMiddleware extends MiddlewareClass<AppState> {
   final ApiClient apiClient;

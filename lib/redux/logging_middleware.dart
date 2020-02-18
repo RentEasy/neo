@@ -1,7 +1,7 @@
 import 'package:redux/redux.dart';
 import 'package:redux_dev_tools/redux_dev_tools.dart';
 
-import '../model/app_state.dart';
+import 'package:neo/model/app_state.dart';
 
 class LoggingMiddleware extends MiddlewareClass<AppState> {
   @override
