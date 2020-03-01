@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:neo/blocs/property_bloc.dart';
+import 'package:neo/blocs/properties_bloc.dart';
 import 'package:neo/view_models/property_model.dart';
 import 'package:provider/provider.dart';
+
+import 'property_list_item.dart';
 
 class PropertyListScreen extends StatelessWidget {
   _createProperty() {
@@ -14,7 +16,9 @@ class PropertyListScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Rental Marketplace')),
       body: PropertyListWidget(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _createProperty,
+        onPressed: () {
+          Navigator.pushNamed(context, '/properties/create');
+        },
         tooltip: 'Create Property',
         child: Icon(Icons.add),
       ),
@@ -26,7 +30,7 @@ class PropertyListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Provider.of<PropertyBLoC>(context).properties,
+      stream: Provider.of<PropertiesBLoC>(context).properties,
       builder: (context, propertiesSnapshot) {
         if (!propertiesSnapshot.hasData) {
           return Center(
@@ -35,29 +39,9 @@ class PropertyListWidget extends StatelessWidget {
         }
 
         final list = propertiesSnapshot.data as List<PropertyModel>;
-
-        return ListView.separated(
+        return ListView.builder(
           itemCount: list.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(
-                list[index].fullAddress,
-              ),
-              subtitle: Text(
-                list[index].id.toString(),
-              ),
-              trailing: Text(
-                "3",
-                textAlign: TextAlign.center,
-              ),
-            );
-          },
-          separatorBuilder: (context, index) {
-            return Container(
-              height: 1,
-              color: Colors.grey,
-            );
-          },
+          itemBuilder: (context, position) => PropertyListItem(list[position]),
         );
       },
     );

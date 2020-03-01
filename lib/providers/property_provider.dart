@@ -5,15 +5,50 @@ import 'package:neo/models/property_model.dart';
 class PropertyProvider {
   // method will give us Data model
   Future<List<Property>> getProperties() {
-    return getGraphQLClient().query(_queryOptions()).then(_toProperties);
+    return getGraphQLClient()
+        .query(QueryOptions(documentNode: gql(getPropertiesQuery)))
+        .then(_toProperties);
   }
 
-// provides Graph Query options, we can provide the optional variable here
-  QueryOptions _queryOptions() {
-    return QueryOptions(documentNode: gql(getPropertiesQuery));
+  // method will give us Data model
+  Future<Property> createProperty(Property property) {
+    var options =
+        MutationOptions(documentNode: gql(createPropertyQuery), variables: {
+      'address': property.address,
+      'city': 'Pittsburgh',
+      'state': 'PA',
+      'zipcode': '15217',
+    });
+    var mutator = getGraphQLClient().mutate(options);
+    return mutator.then(_toPropertyFromCreate);
   }
 
-// parse JSON to Data model
+  // method will give us Data model
+  Future<Property> getPropertyById(int id) {
+    return getGraphQLClient()
+        .query(QueryOptions(
+          documentNode: gql(getPropertyQuery),
+          variables: {'id': id},
+        ))
+        .then(_toProperty);
+  }
+
+  Property _toPropertyFromCreate(QueryResult queryResult) {
+    if (queryResult.hasException) {
+      throw queryResult.exception;
+    }
+
+    return Property.fromJson(queryResult.data['create']);
+  }
+
+  Property _toProperty(QueryResult queryResult) {
+    if (queryResult.hasException) {
+      throw queryResult.exception;
+    }
+
+    return Property.fromJson(queryResult.data['property']);
+  }
+
   List<Property> _toProperties(QueryResult queryResult) {
     if (queryResult.hasException) {
       throw queryResult.exception;
@@ -41,3 +76,29 @@ const String getPropertiesQuery = r'''
   }
 }
 ''';
+const String getPropertyQuery = """
+query GetProperty(\$id: Int!) {
+  property(id: \$id){
+    address
+    city
+    id
+    sqft
+    state
+    style
+    zipcode
+  }
+}
+""";
+const String createPropertyQuery = r"""
+mutation CreateProperty($zipcode: String!, $address: String!, $city: String!, $state: String!) {
+  create(zipcode: $zipcode, address: $address, city: $city, state: $state){
+    address
+    city
+    id
+    sqft
+    state
+    style
+    zipcode
+  }
+}
+""";
