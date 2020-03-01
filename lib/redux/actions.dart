@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import 'package:neo/model/property.dart';
 import 'package:neo/screens/marketplace/properties/property_list.dart';
 
@@ -15,6 +14,15 @@ class AddPropertyAction extends Equatable {
 class FetchAllPropertiesAction extends Equatable {
   @override
   List<Object> get props => [];
+}
+
+class FetchSinglePropertyAction extends Equatable {
+  final Property property;
+
+  FetchSinglePropertyAction(this.property);
+
+  @override
+  List<Object> get props => [property];
 }
 
 class FetchPropertiesAction extends Equatable {

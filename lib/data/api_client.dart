@@ -1,13 +1,14 @@
+import 'package:flutter/material.dart';
+import "package:graphql_flutter/graphql_flutter.dart";
+import 'package:neo/data/operations/queries.dart';
+import 'package:neo/data/property_provider.dart';
+import 'package:neo/main.dart';
 import 'package:neo/model/property.dart';
 
 class ApiClient {
-  Future<List<Property>> fetchProperties() {
-    return Future.delayed(Duration(seconds: 3), () {
-      return [
-        Property(1, '1234 Fake St'),
-        Property(2, '4321 Main St'),
-        Property(3, '9238 Forward Ave'),
-      ];
-    });
+  Future<List<Property>> fetchProperties() async {
+    PropertyProvider pp = PropertyProvider();
+
+    return pp.getProperties();
   }
 }

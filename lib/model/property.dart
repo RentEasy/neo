@@ -25,3 +25,5 @@ class Property extends Equatable {
   @override
   List<Object> get props => [id, address];
 }
+
+enum LeaseDuration { sixmonths, oneyear, twoyears }
