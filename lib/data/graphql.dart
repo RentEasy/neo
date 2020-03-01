@@ -1,22 +1,20 @@
-import 'package:flutter/material.dart';
-import "package:graphql_flutter/graphql_flutter.dart";
+import 'dart:io';
 
-class GraphQLConfiguration {
-  static HttpLink httpLink = HttpLink(
-    uri: "http://localhost:8080/property",
+import 'package:graphql/client.dart';
+
+final HttpLink _httpLink = HttpLink(
+  uri: 'http://localhost:8080/property',
+);
+
+final Link _link = _httpLink;
+
+GraphQLClient _client;
+
+GraphQLClient getGraphQLClient() {
+  _client ??= GraphQLClient(
+    link: _link,
+    cache: InMemoryCache(),
   );
 
-  ValueNotifier<GraphQLClient> client = ValueNotifier(
-    GraphQLClient(
-      link: httpLink,
-      cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject),
-    ),
-  );
-
-  GraphQLClient clientToQuery() {
-    return GraphQLClient(
-      cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject),
-      link: httpLink,
-    );
-  }
+  return _client;
 }

@@ -1,13 +1,11 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:neo/main.dart';
-import 'package:neo/model/property.dart';
+import 'package:neo/data/graphql.dart';
+import 'package:neo/models/property_model.dart';
 
 class PropertyProvider {
-  GraphQLClient _client = graphQLConfiguration.clientToQuery();
-
   // method will give us Data model
   Future<List<Property>> getProperties() {
-    return _client.query(_queryOptions()).then(_toProperties);
+    return getGraphQLClient().query(_queryOptions()).then(_toProperties);
   }
 
 // provides Graph Query options, we can provide the optional variable here
