@@ -12,7 +12,7 @@ class PropertyListItemWidget extends StatelessWidget {
     return InkWell(
       onTap: () => {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => PropertyWidget(property: property)))
+            builder: (context) => PropertyScreen(property: property)))
       },
       child: ListTile(
         title: Text(property.fullAddress),

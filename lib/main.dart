@@ -9,9 +9,8 @@ void main() => runApp(RentEasyApp());
 class RentEasyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     '/properties/create': (BuildContext context) => new CreatePropertyScreen(),
-//    '/properties/edit': (BuildContext context) => new EditProperty(),
-    '/properties/list': (BuildContext context) => new PropertyListWidget(),
-    '/properties/property': (BuildContext context) => new PropertyWidget(),
+    '/properties/list': (BuildContext context) => new PropertyListScreen(),
+    '/properties/property': (BuildContext context) => new PropertyScreen(),
   };
 
   @override

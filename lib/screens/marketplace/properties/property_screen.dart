@@ -3,10 +3,10 @@ import 'package:neo/view_models/property_model.dart';
 
 import 'widgets/favorite_widget.dart';
 
-class PropertyWidget extends StatelessWidget {
+class PropertyScreen extends StatelessWidget {
   final PropertyModel property;
 
-  PropertyWidget({this.property});
+  PropertyScreen({this.property});
 
   Column _buildButtonColumn(Color color, IconData icon, String label) {
     return Column(
