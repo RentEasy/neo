@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:neo/blocs/create_property_bloc.dart';
 import 'package:neo/models/property_model.dart';
 import 'package:neo/providers/property_provider.dart';
-import 'package:neo/screens/marketplace/properties/property_widget.dart';
 import 'package:provider/provider.dart';
 
 //
@@ -45,7 +44,10 @@ class CreatePropertyScreen extends StatelessWidget {
       dispose: (_, bloc) => bloc.dispose(),
       child: Scaffold(
           appBar: AppBar(title: Text('Create Property')),
-          body: CreatePropertyForm()),
+          body: Container(
+            padding: EdgeInsets.all(10),
+            child: CreatePropertyForm(),
+          )),
     );
   }
 }
@@ -59,48 +61,101 @@ class CreatePropertyForm extends StatefulWidget {
 
 class CreatePropertyFormState extends State<CreatePropertyForm> {
   final _formKey = GlobalKey<FormState>();
+  Property property = Property();
 
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<CreatePropertyBLoC>(context);
 
-    // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.home),
+              hintText: '1234 Main St. Pittsburgh, PA 15217',
+              labelText: 'Property Address',
+            ),
             validator: (value) {
               if (value.isEmpty) {
-                return 'Please enter some text';
+                return 'Please enter your properties addres';
               }
               return null;
             },
+            onSaved: (val) => setState(() => property.address = val),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: TextFormField(
+                    onSaved: (val) =>
+                        setState(() => property.bedrooms = int.parse(val)),
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.airline_seat_individual_suite),
+                      hintText: '4',
+                      labelText: 'Bedrooms',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '?';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: TextFormField(
+                    onSaved: (val) =>
+                        setState(() => property.fullBaths = int.parse(val)),
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.airline_seat_legroom_reduced),
+                      hintText: '2',
+                      labelText: 'Bathrooms',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '?';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid, or false
-                // otherwise.
-                if (_formKey.currentState.validate()) {
-                  // If the form is valid, display a Snackbar.
-                  bloc
-                      .createProperty(Property(
-                        address: "Herp",
-                      ))
-                      .then((property) => {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => PropertyWidget(
-                                    property: bloc.toViewModel(property))))
-                          });
+            child: Center(
+              child: RaisedButton(
+                textColor: Colors.white,
+                color: Colors.blue,
+                onPressed: () {
+                  final form = _formKey.currentState;
 
-                  Scaffold.of(context)
-                      .showSnackBar(SnackBar(content: Text('Processing Data')));
-                }
-              },
-              child: Text('Submit'),
+                  if (form.validate()) {
+                    form.save();
+
+                    bloc.createProperty(property).then((property) {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text('Successfully saved property')));
+                      Navigator.pop(context);
+                    });
+
+//                        Navigator.of(context).push(MaterialPageRoute(
+//                            builder: (context) => PropertyWidget(
+//                                property: bloc.toViewModel(property))))
+
+                  }
+                },
+                child: Text('List Property'),
+              ),
             ),
           ),
         ],

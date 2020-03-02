@@ -86,6 +86,7 @@ query GetProperty(\$id: Int!) {
     state
     style
     zipcode
+    __typename
   }
 }
 """;
@@ -99,6 +100,7 @@ mutation CreateProperty($zipcode: String!, $address: String!, $city: String!, $s
     state
     style
     zipcode
+    __typename
   }
 }
 """;
