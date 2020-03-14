@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:neo/blocs/properties_bloc.dart';
 import 'package:neo/providers/property_provider.dart';
 import 'package:neo/screens/marketplace/properties/index.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(RentEasyApp());
+Future main() async {
+  await DotEnv().load('.env');
+
+  runApp(RentEasyApp());
+}
 
 class RentEasyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{

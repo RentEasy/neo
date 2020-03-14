@@ -54,7 +54,7 @@ class PropertyProvider {
       throw queryResult.exception;
     }
 
-    final list = queryResult.data['list'] as List<dynamic>;
+    final list = queryResult.data['properties'] as List<dynamic>;
 
     return list
         .map((repoJson) => Property.fromJson(repoJson))
@@ -64,8 +64,8 @@ class PropertyProvider {
 
 // Graph Query to get repository of current user
 const String getPropertiesQuery = r'''
-  query GetProperties {
-  list{
+query GetProperties {
+  properties {
     address
     city
     id

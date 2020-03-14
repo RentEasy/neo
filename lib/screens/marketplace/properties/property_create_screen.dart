@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:neo/blocs/create_property_bloc.dart';
-import 'package:neo/models/property_model.dart';
+import 'package:neo/models/rental_input_model.dart';
 import 'package:neo/providers/property_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:search_map_place/search_map_place.dart';
 
 class CreatePropertyScreen extends StatelessWidget {
   @override
@@ -31,7 +33,7 @@ class CreatePropertyForm extends StatefulWidget {
 
 class _CreatePropertyFormState extends State<CreatePropertyForm> {
   final _formKey = GlobalKey<FormState>();
-  Property property = Property();
+  RentalInput rental = RentalInput();
 
   @override
   Widget build(BuildContext context) {
@@ -40,21 +42,65 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+//        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TextFormField(
-            decoration: const InputDecoration(
-              icon: Icon(Icons.home),
-              hintText: '1234 Main St. Pittsburgh, PA 15217',
-              labelText: 'Property Address',
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter your properties addres';
-              }
-              return null;
+          SearchMapPlaceWidget(
+            placeholder: "Your Properties Address",
+            apiKey: DotEnv().env['GOOGLE_SEARCH_API_KEY'],
+            // The language of the autocompletion
+            language: 'en',
+            // The position used to give better recomendations. In this case we are using the user position
+//            location: userPosition.coordinates,
+//            radius: 30000,
+            onSelected: (Place place) async {
+              print(place.description);
+              final geolocation = await place.geolocation;
+
+              print(geolocation.coordinates);
+              print(geolocation.bounds);
             },
-            onSaved: (val) => setState(() => property.address = val),
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.home),
+                      labelText: 'Property Type',
+                    ),
+                    value: rental.propertyType,
+                    items: rental.propertyTypeValues.map((String value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: new Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String value) =>
+                        setState(() => rental.propertyType = value),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: DropdownButtonFormField<String>(
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.person),
+                      labelText: 'Status',
+                    ),
+                    value: rental.rentalStatus,
+                    items: rental.rentalStatusValues.map((String value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: new Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String value) =>
+                        setState(() => rental.rentalStatus = value),
+                  ),
+                ),
+              ),
+            ],
           ),
           Row(
             children: <Widget>[
@@ -62,7 +108,52 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
                 child: Container(
                   child: TextFormField(
                     onSaved: (val) =>
-                        setState(() => property.bedrooms = int.parse(val)),
+                        setState(() => rental.bedrooms = int.parse(val)),
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.check),
+                      hintText: '750.00',
+                      labelText: 'Deposit',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '?';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: TextFormField(
+                    onSaved: (val) =>
+                        setState(() => rental.rentMonthly = double.parse(val)),
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.attach_money),
+                      hintText: '1,000.00',
+                      labelText: 'Monthly Rent',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return '?';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  child: TextFormField(
+                    onSaved: (val) =>
+                        setState(() => rental.bedrooms = int.parse(val)),
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.airline_seat_individual_suite),
@@ -82,7 +173,7 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
                 child: Container(
                   child: TextFormField(
                     onSaved: (val) =>
-                        setState(() => property.fullBaths = int.parse(val)),
+                        setState(() => rental.bathrooms = int.parse(val)),
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
                       icon: Icon(Icons.airline_seat_legroom_reduced),
@@ -112,11 +203,11 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
                   if (form.validate()) {
                     form.save();
 
-                    bloc.createProperty(property).then((property) {
-                      Scaffold.of(context).showSnackBar(SnackBar(
-                          content: Text('Successfully saved property')));
-                      Navigator.pop(context);
-                    });
+//                    bloc.createProperty(rental).then((property) {
+//                      Scaffold.of(context).showSnackBar(SnackBar(
+//                          content: Text('Successfully saved property')));
+//                      Navigator.pop(context);
+//                    });
                   }
                 },
                 child: Text('List Property'),

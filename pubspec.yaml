@@ -20,6 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
 
+  flutter_dotenv: ^2.1.0
+
   provider: ^4.0.4
   graphql_flutter: ^3.0.0
 
@@ -27,6 +29,9 @@ dependencies:
   equatable: ^1.0.3
   shared_preferences: ^0.5.6+1
 
+  search_map_place: # ^0.1.1
+    git:
+      url: git://github.com/renteasy/search_map_place.git
 
 dev_dependencies:
   flutter_test:
@@ -46,6 +51,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - images/ialicante-mediterranean-homes-475777-unsplash.jpg
     - images/jesse-roberts-146556-unsplash.jpg
     - images/scott-webb-167099-unsplash.jpg
