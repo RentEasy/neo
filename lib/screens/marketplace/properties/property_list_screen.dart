@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neo/blocs/rentals_bloc.dart';
 import 'package:neo/screens/marketplace/properties/widgets/property_list_item_widget.dart';
-import 'package:neo/view_models/property_model.dart';
 import 'package:neo/view_models/rental_model.dart';
 import 'package:provider/provider.dart';
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:neo/screens/marketplace/properties/index.dart';
-import 'package:neo/view_models/property_model.dart';
 import 'package:neo/view_models/rental_model.dart';
 
 class PropertyListItemWidget extends StatelessWidget {
@@ -16,8 +15,8 @@ class PropertyListItemWidget extends StatelessWidget {
             builder: (context) => PropertyScreen(rental: rental)))
       },
       child: ListTile(
-        title: Text(rental.fullAddress),
-        subtitle: Text("Listed on ${rental.listingDay} for \$${rental.rentMonthly}/mo"),
+        title: Text(rental.address),
+        subtitle: Text("Listed on ${rental.listingDay} for ${rental.rentMonthly}/mo"),
         leading: Image.asset(
           'images/ialicante-mediterranean-homes-475777-unsplash.jpg',
           fit: BoxFit.fitHeight,

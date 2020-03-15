@@ -2,22 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:neo/blocs/create_property_bloc.dart';
-import 'package:neo/blocs/create_rental_bloc.dart';
+import 'package:neo/blocs/rentals_bloc.dart';
 import 'package:neo/models/rental_input_model.dart';
 import 'package:neo/providers/geocode_provider.dart';
 import 'package:neo/providers/rental_provider.dart';
-import 'package:neo/providers/create_rental_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:search_map_place/search_map_place.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geocoder/geocoder.dart';
 
 class CreatePropertyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider<CreateRentalBLoC>(
-      create: (_) => CreateRentalBLoC(rentalProvider: CreateRentalProvider()),
+    return Provider<RentalsBLoC>(
+      create: (_) => RentalsBLoC(rentalProvider: RentalProvider()),
       dispose: (_, bloc) => bloc.dispose(),
       child: Scaffold(
           appBar: AppBar(title: Text('List Your Property')),
@@ -212,7 +209,7 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
     );
   }
 
-  Widget _form(CreateRentalBLoC bloc) {
+  Widget _form(RentalsBLoC bloc) {
     return Form(
       key: _formKey,
       child: Column(
@@ -259,12 +256,11 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
                   if (form.validate()) {
                     form.save();
 
-                    print(rental.toJson());
-//                    bloc.createRental(rental).then((property) {
-//                      Scaffold.of(context).showSnackBar(SnackBar(
-//                          content: Text('Successfully saved property')));
-//                      Navigator.pop(context);
-//                    });
+                    bloc.createRental(rental).then((property) {
+                      Scaffold.of(context).showSnackBar(SnackBar(
+                          content: Text('Successfully saved property')));
+                      Navigator.pop(context);
+                    });
                   }
                 },
                 child: Text('List Property'),
@@ -280,7 +276,7 @@ class _CreatePropertyFormState extends State<CreatePropertyForm> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of<CreateRentalBLoC>(context);
+    final bloc = Provider.of<RentalsBLoC>(context);
 
     return Container(
       child: Column(

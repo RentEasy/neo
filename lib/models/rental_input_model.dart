@@ -39,7 +39,7 @@ class RentalInput {
         'city': city,
         'state': state,
         'zipcode': zipcode,
-        'coordinates': coordinates,
+        'coordinates': coordinates.toString(),
         'propertyType': propertyType,
         'rentalStatus': rentalStatus,
         'unit': unit,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:neo/blocs/rentals_bloc.dart';
 import 'package:neo/providers/rental_provider.dart';
+import 'package:neo/screens/marketplace/application/application_screen.dart';
 import 'package:neo/screens/marketplace/properties/index.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +17,7 @@ class RentEasyApp extends StatelessWidget {
     '/properties/create': (BuildContext context) => new CreatePropertyScreen(),
     '/properties/list': (BuildContext context) => new PropertyListScreen(),
     '/properties/property': (BuildContext context) => new PropertyScreen(),
+    '/application/submit': (BuildContext context) => new ApplicationScreen(),
   };
 
   @override
