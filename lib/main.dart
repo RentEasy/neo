@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:neo/blocs/properties_bloc.dart';
-import 'package:neo/providers/property_provider.dart';
+import 'package:neo/blocs/rentals_bloc.dart';
+import 'package:neo/providers/rental_provider.dart';
 import 'package:neo/screens/marketplace/properties/index.dart';
 import 'package:provider/provider.dart';
 
@@ -34,9 +34,9 @@ class RentEasyApp extends StatelessWidget {
 class Marketplace extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider<PropertiesBLoC>(
-      create: (_) => PropertiesBLoC(
-        propertyProvider: PropertyProvider(),
+    return Provider<RentalsBLoC>(
+      create: (_) => RentalsBLoC(
+        rentalProvider: RentalProvider(),
       ),
       dispose: (_, bloc) => bloc.dispose(),
       child: PropertyListScreen(),

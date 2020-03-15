@@ -1,3 +1,5 @@
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 class RentalInput {
   final List<String> propertyTypeValues = [
     "Apartment",
@@ -17,7 +19,7 @@ class RentalInput {
   String state;
   String zipcode;
 
-  String coordinates;
+  LatLng coordinates;
 
   String propertyType;
   String rentalStatus;
@@ -33,9 +35,19 @@ class RentalInput {
   RentalInput({this.address, this.city, this.state, this.zipcode});
 
   Map<String, dynamic> toJson() => {
-        "address": address,
-        "city": city,
-        "state": state,
-        "zipcode": zipcode,
+        'address': address,
+        'city': city,
+        'state': state,
+        'zipcode': zipcode,
+        'coordinates': coordinates,
+        'propertyType': propertyType,
+        'rentalStatus': rentalStatus,
+        'unit': unit,
+        'sqft': sqft,
+        'bedrooms': bedrooms,
+        'bathrooms': bathrooms,
+        'stories': stories,
+        'rentDeposit': rentDeposit,
+        'rentMonthly': rentMonthly,
       };
 }

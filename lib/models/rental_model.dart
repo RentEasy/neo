@@ -1,38 +1,41 @@
 class Rental {
   int id;
-  String parcel;
+
+  // Property Details
   String address;
   String city;
   String coordinates;
-  int lotSqft;
-  int sqft;
   String state;
   String zipcode;
-  String useCode;
-  int totalRooms;
-  String basement;
-  String style;
-  int bedrooms;
-  String grade;
-  int stories;
-  int fullBaths;
-  int halfBaths;
-  String condition;
-  int yearBuilt;
-  int fireplaces;
-  String exteriorFinish;
-  String heatingCooling;
-  int basementGarage;
-  String roofType;
 
-  Rental({this.id, this.address, this.city, this.state, this.zipcode});
+  // Rental Details
+  String unit;
+  int sqft;
+  int bedrooms;
+  int bathrooms;
+  int stories;
+  double rentDeposit;
+  double rentMonthly;
+  DateTime listingDate;
+
+  Rental({this.id, this.address, this.city, this.state, this.zipcode, this.unit, this.sqft, this.bedrooms, this.bathrooms, this.stories, this.rentDeposit, this.rentMonthly, this.listingDate});
 
   factory Rental.fromJson(Map<String, dynamic> json) => new Rental(
-      id: json["id"],
-      address: json["address"],
-      city: json["city"],
-      state: json["state"],
-      zipcode: json["zipcode"]);
+        id: json["id"],
+        address: json["property"]["address"],
+        city: json["property"]["city"],
+        state: json["property"]["state"],
+        zipcode: json["property"]["zipcode"],
+
+//        unit: json["unit"],
+//        sqft: json["sqft"] ?? 0,
+        bedrooms: json["bedrooms"],
+        bathrooms: json["bathrooms"],
+//        stories: json["stories"] ?? 1,
+        rentDeposit: json["rentDeposit"] + 0.00,
+        rentMonthly: json["rentMonthly"] + 0.00,
+        listingDate: DateTime.parse(json["listingDate"]),
+  );
 
   Map<String, dynamic> toJson() => {
         "id": id,

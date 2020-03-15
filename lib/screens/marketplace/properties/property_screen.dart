@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:neo/view_models/property_model.dart';
+import 'package:neo/view_models/rental_model.dart';
 
 import 'widgets/favorite_widget.dart';
 
 class PropertyScreen extends StatelessWidget {
-  final PropertyModel property;
+  final RentalModel rental;
 
-  PropertyScreen({this.property});
+  PropertyScreen({this.rental});
 
   Column _buildButtonColumn(Color color, IconData icon, String label) {
     return Column(
@@ -41,7 +42,7 @@ class PropertyScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Text(
-                    property.fullAddress,
+                    rental.fullAddress,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -89,7 +90,7 @@ class PropertyScreen extends StatelessWidget {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(property.fullAddress),
+        title: Text(rental.fullAddress),
       ),
       body: ListView(
         children: <Widget>[
